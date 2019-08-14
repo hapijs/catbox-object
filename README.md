@@ -8,7 +8,7 @@ mode). It uses a single interval timeout to look for expired records and clean t
 Unlike the **catbox-memory** cache, it does not clone objects stored (in either direction) or keep
 track of memory usage.
 
-[![Build Status](https://api.travis-ci.org/hapijs/catbox-object.svg)](https://travis-ci.org/hapijs/catbox-object)
+[![Build Status](https://api.travis-ci.org/hapijs/catbox-object.svg)](https://travis-ci.org/hapijs/catbox-object) [![Greenkeeper badge](https://badges.greenkeeper.io/hapijs/catbox-object.svg)](https://greenkeeper.io/)
 
 ### Options
 
