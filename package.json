@@ -1,7 +1,7 @@
 {
   "name": "@hapi/catbox-object",
   "description": "Memory object adapter for catbox",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "git://github.com/hapijs/catbox-object",
   "main": "lib/index.js",
   "keywords": [
