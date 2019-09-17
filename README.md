@@ -1,6 +1,6 @@
 <a href="http://hapijs.com"><img src="https://github.com/hapijs/assets/blob/master/images/family.svg" width="180px" align="right" /></a>
 
-# catbox-object
+# @hapi/catbox-object
 
 Memory object adapter for [catbox](https://github.com/hapijs/catbox).
 This adapter is not designed to share a common cache between multiple processes (e.g. in a cluster
