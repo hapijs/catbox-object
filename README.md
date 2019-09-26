@@ -9,11 +9,3 @@ Unlike the **catbox-memory** cache, it does not clone objects stored (in either 
 track of memory usage.
 
 [![Build Status](https://api.travis-ci.org/hapijs/catbox-object.svg?branch=master)](https://travis-ci.org/hapijs/catbox-object)
-
-### Options
-
-- `maxSize` - sets an upper limit on the number of items that can be stored in the
-  cache. Once this limit is reached no additional items will be added to the cache
-  until some expire. Defaults to `1000`.
-- `minCleanupIntervalMsec` - the minimum number of milliseconds in between each cache cleanup.
-  Defaults to 1 second (`1000`).
