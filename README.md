@@ -12,5 +12,6 @@
 
 - [Documentation and API](https://hapi.dev/family/catbox-object/)
 - [Versions status](https://hapi.dev/resources/status/#catbox-object) (builds, dependencies, node versions, licenses, eol)
+- [Changelog](https://hapi.dev/family/catbox-object/changelog/)
 - [Project policies](https://hapi.dev/policies/)
 - [Free and commercial support options](https://hapi.dev/support/)
