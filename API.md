@@ -1,4 +1,12 @@
 
+### Introduction
+
+Memory object adapter for [catbox](https://github.com/hapijs/catbox).
+This adapter is not designed to share a common cache between multiple processes (e.g. in a cluster
+mode). It uses a single interval timeout to look for expired records and clean them from memory.
+Unlike the **catbox-memory** cache, it does not clone objects stored (in either direction) or keep
+track of memory usage.
+
 ### Options
 
 - `maxSize` - sets an upper limit on the number of items that can be stored in the
