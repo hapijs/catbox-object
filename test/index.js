@@ -14,7 +14,7 @@ const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
 
 
-describe('Adapter', () => {
+describe('Adapter', { retry: true }, () => {
 
     it('creates a new connection', async () => {
 
