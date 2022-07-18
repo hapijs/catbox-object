@@ -7,7 +7,7 @@ mode). It uses a single interval timeout to look for expired records and clean t
 Unlike the **catbox-memory** cache, it does not clone objects stored (in either direction) or keep
 track of memory usage.
 
-### Options
+### `new CatboxObject.Engine(options)`
 
 - `maxSize` - sets an upper limit on the number of items that can be stored in the
   cache. Once this limit is reached no additional items will be added to the cache
