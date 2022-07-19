@@ -1,6 +1,6 @@
 'use strict';
 
-const Adapter = require('..');
+const { Engine } = require('..');
 const Catbox = require('@hapi/catbox');
 const Code = require('@hapi/code');
 const Hoek = require('@hapi/hoek');
@@ -14,18 +14,18 @@ const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
 
 
-describe('Adapter', { retry: true }, () => {
+describe('Engine', { retry: true }, () => {
 
     it('creates a new connection', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         expect(client.isReady()).to.equal(true);
     });
 
     it('closes the connection', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         expect(client.isReady()).to.equal(true);
         await client.stop();
@@ -34,7 +34,7 @@ describe('Adapter', { retry: true }, () => {
 
     it('gets an item after setting it', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         const key = { id: 'x', segment: 'test' };
         await client.set(key, '123', 500);
@@ -45,7 +45,7 @@ describe('Adapter', { retry: true }, () => {
     it('gets a buffer', async () => {
 
         const buffer = Buffer.from('string value');
-        const client = new Catbox.Client(new Adapter());
+        const client = new Catbox.Client(new Engine());
 
         await client.start();
         const key = { id: 'x', segment: 'test' };
@@ -57,7 +57,7 @@ describe('Adapter', { retry: true }, () => {
 
     it('gets an item after setting it (no memory limit)', async () => {
 
-        const client = new Catbox.Client(new Adapter({ maxSize: 0 }));
+        const client = new Catbox.Client(new Engine({ maxSize: 0 }));
 
         await client.start();
         const key = { id: 'x', segment: 'test' };
@@ -71,7 +71,7 @@ describe('Adapter', { retry: true }, () => {
 
     it('ignored starting a connection twice chained', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         expect(client.isReady()).to.equal(true);
         await client.start();
@@ -80,7 +80,7 @@ describe('Adapter', { retry: true }, () => {
 
     it('returns not found on get when using null key', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         const result = await client.get(null);
         expect(result).to.equal(null);
@@ -88,7 +88,7 @@ describe('Adapter', { retry: true }, () => {
 
     it('returns not found on get when item expired', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         const key = { id: 'x', segment: 'test' };
         await client.set(key, 'x', 1);
@@ -99,28 +99,28 @@ describe('Adapter', { retry: true }, () => {
 
     it('errors on set when using null key', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         await expect(client.set(null, {}, 1000)).to.reject();
     });
 
     it('errors on get when using invalid key', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         await expect(client.get({})).to.reject();
     });
 
     it('errors on set when using invalid key', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         await expect(client.set({}, {}, 1000)).to.reject();
     });
 
     it('ignores set when using non-positive ttl value', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.start();
         const key = { id: 'x', segment: 'test' };
         await expect(client.set(key, 'y', 0)).to.not.reject();
@@ -128,7 +128,7 @@ describe('Adapter', { retry: true }, () => {
 
     it('errors on get when stopped', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.stop();
         const key = { id: 'x', segment: 'test' };
         expect(() => client.connection.get(key)).to.throw();
@@ -136,7 +136,7 @@ describe('Adapter', { retry: true }, () => {
 
     it('errors on set when stopped', async () => {
 
-        const client = new Catbox.Client(Adapter);
+        const client = new Catbox.Client(Engine);
         await client.stop();
         const key = { id: 'x', segment: 'test' };
         expect(() => client.connection.set(key, 'y', 1)).to.throw();
@@ -150,7 +150,7 @@ describe('Adapter', { retry: true }, () => {
 
         const fn = () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             const cache = new Catbox.Policy(config, client, '');    // eslint-disable-line no-unused-vars
         };
 
@@ -165,7 +165,7 @@ describe('Adapter', { retry: true }, () => {
 
         const fn = () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             const cache = new Catbox.Policy(config, client, 'a\u0000b');    // eslint-disable-line no-unused-vars
         };
 
@@ -176,7 +176,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('creates an empty cache object', async () => {
 
-            const memory = new Adapter();
+            const memory = new Engine();
             expect(memory.cache).to.not.exist();
             await memory.start();
             expect(memory.cache).to.exist();
@@ -188,7 +188,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('sets the cache object to null', async () => {
 
-            const memory = new Adapter();
+            const memory = new Engine();
             expect(memory.cache).to.not.exist();
             await memory.start();
             expect(memory.cache).to.exist();
@@ -202,7 +202,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('returns not found on missing item', async () => {
 
-            const memory = new Adapter();
+            const memory = new Engine();
             await memory.start();
             await memory.set({ segment: 'test', id: 'test1' }, 'test', 1000);
             const result = await memory.get({ segment: 'test', id: 'test2' });
@@ -218,7 +218,7 @@ describe('Adapter', { retry: true }, () => {
                 id: 'test'
             };
 
-            const memory = new Adapter();
+            const memory = new Engine();
             expect(memory.cache).to.not.exist();
 
             await memory.start();
@@ -239,7 +239,7 @@ describe('Adapter', { retry: true }, () => {
                 id: 'test'
             };
 
-            const memory = new Adapter();
+            const memory = new Engine();
             expect(memory.cache).to.not.exist();
 
             await memory.start();
@@ -264,7 +264,7 @@ describe('Adapter', { retry: true }, () => {
                 id: 'test2'
             };
 
-            const memory = new Adapter({ minCleanupIntervalMsec: 200 });
+            const memory = new Engine({ minCleanupIntervalMsec: 200 });
             expect(memory.cache).to.not.exist();
 
             await memory.start();
@@ -294,7 +294,7 @@ describe('Adapter', { retry: true }, () => {
                 id: 'test2'
             };
 
-            const memory = new Adapter({ minCleanupIntervalMsec: 100 });
+            const memory = new Engine({ minCleanupIntervalMsec: 100 });
             expect(memory.cache).to.not.exist();
 
             await memory.start();
@@ -320,7 +320,7 @@ describe('Adapter', { retry: true }, () => {
                 id: 'test'
             };
 
-            const memory = new Adapter({ cleanupIntervalMsec: 50 });
+            const memory = new Engine({ cleanupIntervalMsec: 50 });
             expect(memory.cache).to.not.exist();
 
             await memory.start();
@@ -339,7 +339,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('errors when the maxSize has been reached', async () => {
 
-            const memory = new Adapter({ maxSize: 1 });
+            const memory = new Engine({ maxSize: 1 });
             expect(memory.cache).to.not.exist();
 
             await memory.start();
@@ -356,7 +356,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('drops an existing item', async () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             await client.start();
             const key = { id: 'x', segment: 'test' };
             await client.set(key, '123', 500);
@@ -367,7 +367,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('drops an item from a missing segment', async () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             await client.start();
             const key = { id: 'x', segment: 'test' };
             await client.drop(key);
@@ -375,7 +375,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('drops a missing item', async () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             await client.start();
             const key = { id: 'x', segment: 'test' };
             await client.set(key, '123', 500);
@@ -386,21 +386,21 @@ describe('Adapter', { retry: true }, () => {
 
         it('errors on drop when using invalid key', async () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             await client.start();
             await expect(client.drop({})).to.reject();
         });
 
         it('errors on drop when using null key', async () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             await client.start();
             await expect(client.drop(null)).to.reject();
         });
 
         it('errors on drop when stopped', async () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             await client.stop();
             const key = { id: 'x', segment: 'test' };
             await expect(() => client.connection.drop(key)).to.throw();
@@ -408,7 +408,7 @@ describe('Adapter', { retry: true }, () => {
 
         it('errors when cache item dropped while stopped', async () => {
 
-            const client = new Catbox.Client(Adapter);
+            const client = new Catbox.Client(Engine);
             await client.stop();
             await expect(client.drop('a')).to.reject();
         });
@@ -418,19 +418,19 @@ describe('Adapter', { retry: true }, () => {
 
         it('errors when the name is empty', () => {
 
-            const memory = new Adapter();
+            const memory = new Engine();
             expect(() => memory.validateSegmentName('')).to.throw('Empty string');
         });
 
         it('errors when the name has a null character', () => {
 
-            const memory = new Adapter();
+            const memory = new Engine();
             expect(() => memory.validateSegmentName('\u0000test')).to.throw();
         });
 
         it('returns null when there are no errors', () => {
 
-            const memory = new Adapter();
+            const memory = new Engine();
             expect(() => memory.validateSegmentName('valid')).to.not.throw();
         });
     });
